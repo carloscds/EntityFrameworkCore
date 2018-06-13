@@ -31,17 +31,19 @@ namespace Microsoft.EntityFrameworkCore
         ///     or exposed AddDbContext.
         /// </param>
         /// <param name="useLazyLoadingProxies"> <c>True</c> to use lazy-loading proxies; false to prevent their use. </param>
+        /// <param name="useOnlyLazyLoading"> <c>True</c> to use lazy-loading; false to prevent their use. </param>
+        /// <param name="useOnlyProxies"> <c>True</c> to use proxies; false to prevent their use. </param>
         /// <returns> The same builder to allow method calls to be chained. </returns>
         public static DbContextOptionsBuilder UseLazyLoadingProxies(
             [NotNull] this DbContextOptionsBuilder optionsBuilder,
-            bool useLazyLoadingProxies = true)
+            bool useLazyLoadingProxies = true, bool useOnlyLazyLoading = false, bool useOnlyProxies = false)
         {
             Check.NotNull(optionsBuilder, nameof(optionsBuilder));
 
             var extension = optionsBuilder.Options.FindExtension<ProxiesOptionsExtension>()
                             ?? new ProxiesOptionsExtension();
 
-            extension = extension.WithLazyLoading(useLazyLoadingProxies);
+            extension = extension.WithLazyLoading(useLazyLoadingProxies, useOnlyLazyLoading, useOnlyProxies);
 
             ((IDbContextOptionsBuilderInfrastructure)optionsBuilder).AddOrUpdateExtension(extension);
 

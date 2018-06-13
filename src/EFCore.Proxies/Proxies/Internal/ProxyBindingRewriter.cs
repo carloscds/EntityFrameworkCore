@@ -49,7 +49,7 @@ namespace Microsoft.EntityFrameworkCore.Proxies.Internal
         /// </summary>
         public virtual InternalModelBuilder Apply(InternalModelBuilder modelBuilder)
         {
-            if (_options?.UseLazyLoadingProxies == true)
+            if (_options?.UseLazyLoadingProxies == true || _options?.UseLazyLoading == true || _options?.UseOnlyProxies == true)
             {
                 foreach (var entityType in modelBuilder.Metadata.GetEntityTypes())
                 {
@@ -88,16 +88,16 @@ namespace Microsoft.EntityFrameworkCore.Proxies.Internal
                         }
 
                         binding = (ConstructorBinding)entityType[CoreAnnotationNames.ConstructorBinding];
-
+                        
                         entityType[CoreAnnotationNames.ConstructorBinding]
                             = new FactoryMethodConstructorBinding(
                                 _proxyFactory,
                                 _createLazyLoadingProxyMethod,
                                 new List<ParameterBinding>
                                 {
-                                    new EntityTypeParameterBinding(),
-                                    new DefaultServiceParameterBinding(typeof(ILazyLoader), typeof(ILazyLoader), serviceProperty),
-                                    new ObjectArrayParameterBinding(binding.ParameterBindings)
+                                new EntityTypeParameterBinding(),
+                                new DefaultServiceParameterBinding(typeof(ILazyLoader), typeof(ILazyLoader), serviceProperty),
+                                new ObjectArrayParameterBinding(binding.ParameterBindings)
                                 },
                                 proxyType);
 

@@ -19,6 +19,8 @@ namespace Microsoft.EntityFrameworkCore.Proxies.Internal
     public class ProxiesOptionsExtension : IDbContextOptionsExtension
     {
         private bool _useLazyLoadingProxies;
+        private bool _useLazyLoading;
+        private bool _useProxies;
         private string _logFragment;
 
         /// <summary>
@@ -48,18 +50,32 @@ namespace Microsoft.EntityFrameworkCore.Proxies.Internal
         ///     This API supports the Entity Framework Core infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
-        public virtual bool UseLazyLoadingProxies => _useLazyLoadingProxies;
+        public virtual bool UseLazyLoading => _useLazyLoading;
 
         /// <summary>
         ///     This API supports the Entity Framework Core infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
-        public virtual ProxiesOptionsExtension WithLazyLoading(bool useLazyLoadingProxies = true)
+        public virtual bool UseOnlyProxies => _useProxies;
+
+        /// <summary>
+        ///     This API supports the Entity Framework Core infrastructure and is not intended to be used
+        ///     directly from your code. This API may change or be removed in future releases.
+        /// </summary>
+        public virtual bool UseLazyLoadingProxies => _useLazyLoadingProxies;
+
+
+        /// <summary>
+        ///     This API supports the Entity Framework Core infrastructure and is not intended to be used
+        ///     directly from your code. This API may change or be removed in future releases.
+        /// </summary>
+        public virtual ProxiesOptionsExtension WithLazyLoading(bool useLazyLoadingProxies = true, bool useOnlyLasyLoading = false, bool useOnlyProxies = false)
         {
             var clone = Clone();
 
             clone._useLazyLoadingProxies = useLazyLoadingProxies;
-
+            clone._useLazyLoading = useOnlyLasyLoading;
+            clone._useProxies = useOnlyProxies;
             return clone;
         }
 
